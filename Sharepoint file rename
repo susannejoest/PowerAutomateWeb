@@ -1,0 +1,24 @@
+you cannot rename a file directly but have to use a workaround:
+
+1. formula for file rename, e.g. date suffix
+  concat(formatDateTime(utcNow(),'yyyy_MM_dd'),'_TeamMeeting.pptx')
+
+2. Get file properties - Body Item ID - for HTTP POST
+  ID = @{outputs('Copy_Weekly_meeting_ppt_to_Archive_folder_(with_the_same_name)')?['body/ItemId']}
+
+3. Send HTTP request to SharePoint - update archived presentation file name
+  
+  About
+  Site Address* Internal Team Site - Finance Reporting & Analytics - https://generali.sharepoint.com/sites/CH_FinanceReportingAnalytics
+  Method* POST
+  Uri* _api/web/lists/GetByTitle('Documents')/items(
+  )/validateUpdateListItem
+  
+  Headers
+  Accept application/json;odata=verbose
+  Content-Type application/json;odata=verbose
+  
+  Body
+  {"formValues":[{"FieldName": "FileLeafRef","FieldValue": "
+"}]}
+
